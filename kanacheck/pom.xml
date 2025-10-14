@@ -15,6 +15,27 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.25.2</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/tools.jackson.core/jackson-databind -->
+        <dependency>
+            <groupId>tools.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/info.picocli/picocli -->
+        <dependency>
+            <groupId>info.picocli</groupId>
+            <artifactId>picocli</artifactId>
+            <version>4.7.7</version>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>
