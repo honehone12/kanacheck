@@ -18,12 +18,16 @@ public class Kanacheck {
                 .writeValueAsString(config);
             final var path = Paths.get("kanacheck.json");
             Files.writeString(path, json);
+            _log.info("config file has been generated as " + path);
         } catch (Exception e) {
             _log.error(e);
         }
     }
 
     public void check(boolean recursive, String path) {
-
+        if (path == null) {
+            _log.error("Please provide path");
+            return;
+        }
     }
 }
