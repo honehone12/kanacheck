@@ -17,11 +17,13 @@ cd kanacheck
 case "$SUBCMD" in
     "clean")
         mvn clean
+        cd ..
         ;;
     "run")
         mvn package
         echo "******"
-        java -jar target/kanacheck-1.0-SNAPSHOT-jar-with-dependencies.jar "$@"
+        cd ..
+        java -jar kanacheck/target/kanacheck-1.0-SNAPSHOT-jar-with-dependencies.jar "$@"
         ;;
     *)
         echo $USAGE
@@ -29,5 +31,4 @@ case "$SUBCMD" in
         ;;
 esac
 
-cd ..
 exit 0
