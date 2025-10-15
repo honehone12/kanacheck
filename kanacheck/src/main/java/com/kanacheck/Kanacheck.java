@@ -1,5 +1,7 @@
 package com.kanacheck;
 
+import com.kanacheck.config.Config;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -7,60 +9,76 @@ import java.nio.file.Paths;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import tools.jackson.databind.ObjectMapper;
-import com.kanacheck.config.Config;
 
 public class Kanacheck {
-    private final Path CONFIG_PATH = Paths.get("kanacheck.json");
-    private final Logger LOG = LogManager.getLogger(Kanacheck.class); 
+
+    protected static final Path CONFIG_PATH = Paths.get("kanacheck.json");
+    protected final Logger log = LogManager.getLogger(Kanacheck.class);
 
     public void config() {
         try {
             final var config = Config.getDefault();
             final var ser = new ObjectMapper();
-            final var json = ser.writerWithDefaultPrettyPrinter()
+            final var json = ser
+                .writerWithDefaultPrettyPrinter()
                 .writeValueAsString(config);
             Files.writeString(CONFIG_PATH, json);
-            LOG.info("Config file has been generated as " + CONFIG_PATH);
+            log.info("config file has been generated as '{}'", CONFIG_PATH);
         } catch (Exception e) {
-            LOG.error(e);
+            log.error(e);
         }
     }
 
-    public void check(boolean recursive, String path) {
-        if (path == null) {
-            LOG.error("Please provide path");
-            return;
-        }
-
+    public void checkFile(String path) {
         try {
-            if (!Files.exists(CONFIG_PATH)) {
-                LOG.error("Please config first (--config)");
-                return;
-            }
-
-            final var config = readConfig();
-            if (recursive) {
-                searchDir(config);
-            } else {
-                searchFile(config);
-            }
+            searchFile(validatePath(path), readConfig());
         } catch (Exception e) {
-            LOG.error(e);
+            log.error(e);
         }
     }
 
-    private Config readConfig() throws IOException {
+    protected Path validatePath(String path) throws IOException {
+        if (path == null || path.length() == 0) {
+            throw new IOException("please provide path");
+        }
+
+        return Paths.get(path);
+    }
+
+    protected Config readConfig() throws IOException {
+        if (!Files.exists(CONFIG_PATH)) {
+            throw new IOException("please config first (use --config)");
+        }
+
         final var json = Files.readString(CONFIG_PATH);
         final var de = new ObjectMapper();
         final var config = de.readValue(json, Config.class);
         return config;
     }
 
-    private void searchFile(Config config) {
+    protected void searchFile(Path path, Config config) throws IOException {
+        if (!Files.isRegularFile(path)) {
+            throw new IOException(
+                String.format("'%s' is not a file (use --recursive)", path)
+            );
+        }
 
-    }
+        try (BufferedReader r = Files.newBufferedReader(path)) {
+            var n = 1;
+            while (true) {
+                final var line = r.readLine();
+                if (line == null) {
+                    break;
+                }
 
-    private void searchDir(Config config) {
+                for (var s : config.search()) {
+                    if (line.contains(s)) {
+                        log.info("found: '{}', line: {}, file: {}", s, n, path);
+                    }
+                }
 
+                n++;
+            }
+        }
     }
 }
