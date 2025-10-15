@@ -13,7 +13,7 @@ import tools.jackson.databind.ObjectMapper;
 public class Kanacheck {
 
     protected static final Path CONFIG_PATH = Paths.get("kanacheck.json");
-    protected final Logger log = LogManager.getLogger(Kanacheck.class);
+    protected final Logger _log = LogManager.getLogger(Kanacheck.class);
 
     public void config() {
         try {
@@ -23,9 +23,9 @@ public class Kanacheck {
                 .writerWithDefaultPrettyPrinter()
                 .writeValueAsString(config);
             Files.writeString(CONFIG_PATH, json);
-            log.info("config file has been generated as '{}'", CONFIG_PATH);
+            _log.info("config file has been generated as '{}'", CONFIG_PATH);
         } catch (Exception e) {
-            log.error(e);
+            _log.error(e);
         }
     }
 
@@ -33,7 +33,7 @@ public class Kanacheck {
         try {
             searchFile(validatePath(path), readConfig());
         } catch (Exception e) {
-            log.error(e);
+            _log.error(e);
         }
     }
 
@@ -63,17 +63,22 @@ public class Kanacheck {
             );
         }
 
-        try (BufferedReader r = Files.newBufferedReader(path)) {
-            var n = 1;
+        try (final BufferedReader r = Files.newBufferedReader(path)) {
+            long n = 1;
             while (true) {
                 final var line = r.readLine();
                 if (line == null) {
                     break;
                 }
 
-                for (var s : config.search()) {
+                for (final var s : config.search()) {
                     if (line.contains(s)) {
-                        log.info("found: '{}', line: {}, file: {}", s, n, path);
+                        _log.info(
+                            "found: '{}', line: {}, file: {}",
+                            s,
+                            n,
+                            path
+                        );
                     }
                 }
 
