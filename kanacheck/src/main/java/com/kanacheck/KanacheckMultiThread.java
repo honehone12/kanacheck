@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -28,6 +30,17 @@ public class KanacheckMultiThread extends Kanacheck {
         }
     }
 
+    private Optional<String> getFileExtension(Path path) {
+        final var fileName = path.getFileName().toString();
+        final var idx = fileName.lastIndexOf('.');
+        // ignore hidden files
+        if (idx > 0) {
+            return Optional.of(fileName.substring(idx + 1));
+        } else {
+            return Optional.empty();
+        }
+    }
+
     private void searchDir(Path path, Config config) throws IOException {
         if (!Files.isDirectory(path)) {
             throw new IOException(
@@ -38,6 +51,7 @@ public class KanacheckMultiThread extends Kanacheck {
             );
         }
 
+        var extensions = List.of(config.extensions());
         var futures = new ArrayList<CompletableFuture<Void>>();
         try (final var dirStream = Files.walk(path)) {
             final var iter = dirStream.iterator();
@@ -47,12 +61,25 @@ public class KanacheckMultiThread extends Kanacheck {
                     continue;
                 }
 
+                final var ext = getFileExtension(file);
+                // ignore files without extension
+                if (ext.isEmpty()) {
+                    continue;
+                }
+
+                if (!extensions.contains(ext.get())) {
+                    continue;
+                }
+
                 final var fut = CompletableFuture.runAsync(
                     () -> {
                         try {
                             searchFile(file, config);
                         } catch (Exception e) {
-                            _log.error(e);
+                            _log.warn(
+                                "skipping '{}' which is not a utf-8 encoded file",
+                                file
+                            );
                         }
                     },
                     GLOBAL_EXECUTER

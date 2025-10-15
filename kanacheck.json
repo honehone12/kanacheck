@@ -1,3 +1,4 @@
 {
-  "search" : [ "　" ]
+  "search": ["　"],
+  "extensions": ["md", "java", "json", "xml"]
 }

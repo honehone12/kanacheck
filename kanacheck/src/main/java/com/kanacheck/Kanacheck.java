@@ -13,7 +13,7 @@ import tools.jackson.databind.ObjectMapper;
 public class Kanacheck {
 
     protected static final Path CONFIG_PATH = Paths.get("kanacheck.json");
-    protected final Logger _log = LogManager.getLogger(Kanacheck.class);
+    protected final Logger _log = LogManager.getLogger(this);
 
     public void config() {
         try {
@@ -33,7 +33,7 @@ public class Kanacheck {
         try {
             searchFile(validatePath(path), readConfig());
         } catch (Exception e) {
-            _log.error(e);
+            _log.error("'{}' is not a utf-8 encoded file: {}", path, e);
         }
     }
 
@@ -64,6 +64,7 @@ public class Kanacheck {
         }
 
         try (final BufferedReader r = Files.newBufferedReader(path)) {
+            final var targets = config.search();
             long n = 1;
             while (true) {
                 final var line = r.readLine();
@@ -71,7 +72,7 @@ public class Kanacheck {
                     break;
                 }
 
-                for (final var s : config.search()) {
+                for (final var s : targets) {
                     if (line.contains(s)) {
                         _log.info(
                             "found: '{}', line: {}, file: {}",
