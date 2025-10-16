@@ -64,7 +64,7 @@ public class Kanacheck {
         }
 
         try (final BufferedReader r = Files.newBufferedReader(path)) {
-            final var targets = config.search();
+            final var targets = config.targets();
             long n = 1;
             while (true) {
                 final var line = r.readLine();
