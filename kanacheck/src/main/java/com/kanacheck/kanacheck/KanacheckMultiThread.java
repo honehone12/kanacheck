@@ -1,6 +1,7 @@
-package com.kanacheck;
+package com.kanacheck.kanacheck;
 
 import com.kanacheck.config.Config;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -30,7 +31,7 @@ public class KanacheckMultiThread extends Kanacheck {
         }
     }
 
-    private Optional<String> getFileExtension(Path path) {
+    Optional<String> getFileExtension(Path path) {
         final var fileName = path.getFileName().toString();
         final var idx = fileName.lastIndexOf('.');
         // ignore hidden files
@@ -41,7 +42,7 @@ public class KanacheckMultiThread extends Kanacheck {
         }
     }
 
-    private void searchDir(Path path, Config config) throws IOException {
+    void searchDir(Path path, Config config) throws IOException {
         if (!Files.isDirectory(path)) {
             throw new IOException(
                 String.format(

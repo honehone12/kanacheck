@@ -1,4 +1,4 @@
-package com.kanacheck;
+package com.kanacheck.kanacheck;
 
 import com.kanacheck.config.Config;
 import java.io.BufferedReader;
