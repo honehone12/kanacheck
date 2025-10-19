@@ -1,5 +1,8 @@
 package com.kanacheck;
 
+import com.kanacheck.kanacheck.Kanacheck;
+import com.kanacheck.kanacheck.KanacheckMultiThread;
+
 import picocli.CommandLine.Option;
 
 public class Command implements Runnable {
