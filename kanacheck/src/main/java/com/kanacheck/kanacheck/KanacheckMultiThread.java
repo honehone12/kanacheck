@@ -14,10 +14,7 @@ import java.util.concurrent.Executors;
 
 public class KanacheckMultiThread extends Kanacheck {
 
-    private static final ExecutorService GLOBAL_EXECUTER =
-        Executors.newFixedThreadPool(
-            Runtime.getRuntime().availableProcessors()
-        );
+    private static final ExecutorService GLOBAL_EXECUTER = Executors.newVirtualThreadPerTaskExecutor();
 
     public static void shutdown() {
         GLOBAL_EXECUTER.shutdown();
@@ -45,11 +42,9 @@ public class KanacheckMultiThread extends Kanacheck {
     void searchDir(Path path, Config config) throws IOException {
         if (!Files.isDirectory(path)) {
             throw new IOException(
-                String.format(
-                    "'%s' is not a directory (remove --recursive)",
-                    path
-                )
-            );
+                    String.format(
+                            "'%s' is not a directory (remove --recursive)",
+                            path));
         }
 
         var extensions = List.of(config.extensions());
@@ -73,25 +68,22 @@ public class KanacheckMultiThread extends Kanacheck {
                 }
 
                 final var fut = CompletableFuture.runAsync(
-                    () -> {
-                        try {
-                            searchFile(file, config);
-                        } catch (Exception e) {
-                            _log.warn(
-                                "skipping '{}' which is not a utf-8 encoded file",
-                                file
-                            );
-                        }
-                    },
-                    GLOBAL_EXECUTER
-                );
+                        () -> {
+                            try {
+                                searchFile(file, config);
+                            } catch (Exception e) {
+                                _log.warn(
+                                        "skipping '{}' which is not a utf-8 encoded file",
+                                        file);
+                            }
+                        },
+                        GLOBAL_EXECUTER);
                 futures.add(fut);
             }
         }
 
         final var all = CompletableFuture.allOf(
-            futures.toArray(new CompletableFuture[0])
-        );
+                futures.toArray(new CompletableFuture[0]));
         all.join();
     }
 }
