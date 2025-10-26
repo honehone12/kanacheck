@@ -12,22 +12,17 @@ fi
 SUBCMD="$1"
 shift
 
-cd kanacheck
-
 case "$SUBCMD" in
     "clean")
         mvn clean
-        cd ..
         ;;
     "run")
         mvn package
         echo "******"
-        cd ..
-        java -jar kanacheck/target/kanacheck-1.0-SNAPSHOT-jar-with-dependencies.jar "$@"
+        java -jar target/kanacheck-1.0-SNAPSHOT-jar-with-dependencies.jar "$@"
         ;;
     "test")
         mvn test
-        cd ..
         ;;
     *)
         echo $USAGE
