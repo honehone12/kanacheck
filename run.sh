@@ -12,6 +12,8 @@ fi
 SUBCMD="$1"
 shift
 
+cd kanacheck
+
 case "$SUBCMD" in
     "clean")
         mvn clean
@@ -30,5 +32,7 @@ case "$SUBCMD" in
         exit 1
         ;;
 esac
+
+cd ..
 
 exit 0

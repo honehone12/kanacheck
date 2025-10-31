@@ -16,6 +16,7 @@ public class Command implements Runnable {
     @Option(names = "--config")
     private boolean _config;
 
+    @Override
     public void run() {
         if (_config) {
             final var kanacheck = new Kanacheck();
