@@ -2,7 +2,7 @@
 
 set -e
 
-USAGE="use clean|test|run [args...]"
+USAGE="use clean|package|test|run [args...]"
  
 if [ -z "$1" ]; then
     echo $USAGE
@@ -16,9 +16,10 @@ case "$SUBCMD" in
     "clean")
         mvn clean
         ;;
-    "run")
+    "package")
         mvn package
-        echo "******"
+        ;;
+    "run")
         java -jar target/kanacheck-1.0-SNAPSHOT-jar-with-dependencies.jar "$@"
         ;;
     "test")

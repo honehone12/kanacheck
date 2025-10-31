@@ -82,8 +82,7 @@ public class KanacheckMultiThread extends Kanacheck {
             }
         }
 
-        final var all = CompletableFuture.allOf(
-                futures.toArray(new CompletableFuture[0]));
+        final var all = CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new));
         all.join();
     }
 }
