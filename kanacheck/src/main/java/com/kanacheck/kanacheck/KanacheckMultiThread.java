@@ -23,7 +23,7 @@ public class KanacheckMultiThread extends Kanacheck {
     public void checkDir(String path) {
         try {
             searchDir(validatePath(path), readConfig());
-        } catch (Exception e) {
+        } catch (IOException e) {
             _log.error(e);
         }
     }
@@ -71,7 +71,7 @@ public class KanacheckMultiThread extends Kanacheck {
                         () -> {
                             try {
                                 searchFile(file, config);
-                            } catch (Exception e) {
+                            } catch (IOException e) {
                                 _log.warn(
                                         "skipping '{}' which is not a utf-8 encoded file",
                                         file);

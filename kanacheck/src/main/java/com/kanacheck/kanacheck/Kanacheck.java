@@ -1,13 +1,17 @@
 package com.kanacheck.kanacheck;
 
-import com.kanacheck.config.Config;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import com.kanacheck.config.Config;
+
+import tools.jackson.core.JacksonException;
 import tools.jackson.databind.ObjectMapper;
 
 public class Kanacheck {
@@ -24,7 +28,7 @@ public class Kanacheck {
                     .writeValueAsString(config);
             Files.writeString(CONFIG_PATH, json);
             _log.info("config file has been generated as '{}'", CONFIG_PATH);
-        } catch (Exception e) {
+        } catch (IOException | JacksonException e) {
             _log.error(e);
         }
     }
@@ -32,7 +36,7 @@ public class Kanacheck {
     public void checkFile(String path) {
         try {
             searchFile(validatePath(path), readConfig());
-        } catch (Exception e) {
+        } catch (IOException e) {
             _log.error("'{}' is not a utf-8 encoded file: {}", path, e);
         }
     }
