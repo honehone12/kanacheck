@@ -20,8 +20,8 @@ public class Kanacheck {
             final var config = Config.getDefault();
             final var ser = new ObjectMapper();
             final var json = ser
-                .writerWithDefaultPrettyPrinter()
-                .writeValueAsString(config);
+                    .writerWithDefaultPrettyPrinter()
+                    .writeValueAsString(config);
             Files.writeString(CONFIG_PATH, json);
             _log.info("config file has been generated as '{}'", CONFIG_PATH);
         } catch (Exception e) {
@@ -59,7 +59,7 @@ public class Kanacheck {
     protected void searchFile(Path path, Config config) throws IOException {
         if (!Files.isRegularFile(path)) {
             throw new IOException(
-                String.format("'%s' is not a file (use --recursive)", path)
+                    String.format("'%s' is not a file (use --recursive)", path)
             );
         }
 
@@ -75,10 +75,10 @@ public class Kanacheck {
                 for (final var s : targets) {
                     if (line.contains(s)) {
                         _log.info(
-                            "found: '{}', line: {}, file: {}",
-                            s,
-                            n,
-                            path
+                                "found: '{}', line: {}, file: {}",
+                                s,
+                                n,
+                                path
                         );
                     }
                 }

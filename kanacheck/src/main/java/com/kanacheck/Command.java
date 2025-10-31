@@ -7,10 +7,10 @@ import picocli.CommandLine.Option;
 
 public class Command implements Runnable {
 
-    @Option(names = { "-p", "--path" })
+    @Option(names = {"-p", "--path"})
     private String _path;
 
-    @Option(names = { "-r", "--recursive" })
+    @Option(names = {"-r", "--recursive"})
     private boolean _recursive;
 
     @Option(names = "--config")

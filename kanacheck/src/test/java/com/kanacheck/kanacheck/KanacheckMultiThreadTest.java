@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Appender;
 import org.apache.logging.log4j.core.Logger;
@@ -38,12 +39,12 @@ class KanacheckMultiThreadTest {
         // Capture log output
         logOutput = new StringWriter();
         appender = WriterAppender.createAppender(
-            PatternLayout.createDefaultLayout(),
-            null,
-            logOutput,
-            "StringAppender",
-            false,
-            true
+                PatternLayout.createDefaultLayout(),
+                null,
+                logOutput,
+                "StringAppender",
+                false,
+                true
         );
         appender.start();
         rootLogger = (Logger) LogManager.getRootLogger();
@@ -53,9 +54,9 @@ class KanacheckMultiThreadTest {
     @AfterEach
     void tearDown() throws IOException {
         Files.walk(tempDir)
-            .sorted(java.util.Comparator.reverseOrder())
-            .map(Path::toFile)
-            .forEach(java.io.File::delete);
+                .sorted(java.util.Comparator.reverseOrder())
+                .map(Path::toFile)
+                .forEach(java.io.File::delete);
         Files.deleteIfExists(configFile);
         rootLogger.removeAppender(appender);
         appender.stop();
@@ -65,7 +66,6 @@ class KanacheckMultiThreadTest {
     static void tearDownAll() {
         KanacheckMultiThread.shutdown();
     }
-
 
     @Test
     void testCheckDir_emptyDir() throws IOException {
