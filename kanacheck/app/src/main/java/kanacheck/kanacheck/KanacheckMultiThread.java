@@ -1,6 +1,6 @@
-package com.kanacheck.kanacheck;
+package kanacheck.kanacheck;
 
-import com.kanacheck.config.Config;
+import kanacheck.config.Config;
 
 import java.io.IOException;
 import java.nio.file.Files;

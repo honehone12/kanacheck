@@ -1,16 +1,16 @@
-package com.kanacheck;
+package kanacheck;
 
-import com.kanacheck.kanacheck.Kanacheck;
-import com.kanacheck.kanacheck.KanacheckMultiThread;
+import kanacheck.kanacheck.Kanacheck;
+import kanacheck.kanacheck.KanacheckMultiThread;
 
 import picocli.CommandLine.Option;
 
 public class Command implements Runnable {
 
-    @Option(names = {"-p", "--path"})
+    @Option(names = { "-p", "--path" })
     private String _path;
 
-    @Option(names = {"-r", "--recursive"})
+    @Option(names = { "-r", "--recursive" })
     private boolean _recursive;
 
     @Option(names = "--config")

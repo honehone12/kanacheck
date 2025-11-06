@@ -1,4 +1,4 @@
-package com.kanacheck;
+package kanacheck;
 
 import picocli.CommandLine;
 

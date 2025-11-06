@@ -1,4 +1,4 @@
-package com.kanacheck.kanacheck;
+package kanacheck.kanacheck;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.kanacheck.config.Config;
+import kanacheck.config.Config;
 
 class KanacheckTest {
 
@@ -40,8 +40,7 @@ class KanacheckTest {
                 logOutput,
                 "StringAppender",
                 false,
-                true
-        );
+                true);
         appender.start();
         rootLogger = (Logger) LogManager.getRootLogger();
         rootLogger.addAppender(appender);
@@ -57,11 +56,13 @@ class KanacheckTest {
 
     // @Test
     // void testConfigGeneration() throws IOException {
-    //     kanacheck.config();
-    //     Assertions.assertTrue(Files.exists(configFile));
-    //     String content = Files.readString(configFile);
-    //     Assertions.assertEquals("{\n  \"targets\" : [ \"　\" ],\n  \"extensions\" : [ \"md\" ]\n}", content);
+    // kanacheck.config();
+    // Assertions.assertTrue(Files.exists(configFile));
+    // String content = Files.readString(configFile);
+    // Assertions.assertEquals("{\n \"targets\" : [ \" \" ],\n \"extensions\" :
+    // [\"md\" ]\n}", content);
     // }
+
     @Test
     void testConfigGenerationWindows() throws IOException {
         kanacheck.config();
@@ -93,7 +94,7 @@ class KanacheckTest {
         kanacheck.config(); // Create config file
         Config config = kanacheck.readConfig();
         Assertions.assertNotNull(config);
-        Assertions.assertArrayEquals(new String[]{"　"}, config.targets());
-        Assertions.assertArrayEquals(new String[]{"md"}, config.extensions());
+        Assertions.assertArrayEquals(new String[] { "　" }, config.targets());
+        Assertions.assertArrayEquals(new String[] { "md" }, config.extensions());
     }
 }

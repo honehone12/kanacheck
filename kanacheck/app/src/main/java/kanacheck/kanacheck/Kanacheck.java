@@ -1,4 +1,4 @@
-package com.kanacheck.kanacheck;
+package kanacheck.kanacheck;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.kanacheck.config.Config;
+import kanacheck.config.Config;
 
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.ObjectMapper;
@@ -63,8 +63,7 @@ public class Kanacheck {
     protected void searchFile(Path path, Config config) throws IOException {
         if (!Files.isRegularFile(path)) {
             throw new IOException(
-                    String.format("'%s' is not a file (use --recursive)", path)
-            );
+                    String.format("'%s' is not a file (use --recursive)", path));
         }
 
         try (final BufferedReader r = Files.newBufferedReader(path)) {
@@ -82,8 +81,7 @@ public class Kanacheck {
                                 "found: '{}', line: {}, file: {}",
                                 s,
                                 n,
-                                path
-                        );
+                                path);
                     }
                 }
 

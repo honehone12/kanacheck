@@ -1,4 +1,4 @@
-package com.kanacheck.kanacheck;
+package kanacheck.kanacheck;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -44,8 +44,7 @@ class KanacheckMultiThreadTest {
                 logOutput,
                 "StringAppender",
                 false,
-                true
-        );
+                true);
         appender.start();
         rootLogger = (Logger) LogManager.getRootLogger();
         rootLogger.addAppender(appender);
