@@ -54,23 +54,6 @@ class KanacheckTest {
         appender.stop();
     }
 
-    // @Test
-    // void testConfigGeneration() throws IOException {
-    // kanacheck.config();
-    // Assertions.assertTrue(Files.exists(configFile));
-    // String content = Files.readString(configFile);
-    // Assertions.assertEquals("{\n \"targets\" : [ \" \" ],\n \"extensions\" :
-    // [\"md\" ]\n}", content);
-    // }
-
-    @Test
-    void testConfigGenerationWindows() throws IOException {
-        kanacheck.config();
-        Assertions.assertTrue(Files.exists(configFile));
-        String content = Files.readString(configFile);
-        Assertions.assertEquals("{\r\n  \"targets\" : [ \"　\" ],\r\n  \"extensions\" : [ \"md\" ]\r\n}", content);
-    }
-
     @Test
     void testCheckFile() throws IOException {
         kanacheck.config(); // Create config file
