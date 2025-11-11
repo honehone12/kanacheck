@@ -17,7 +17,7 @@ repositories {
     mavenCentral()
 }
 
-group = 'app' 
+group = 'kanacheck' 
 version = '1.0.0'
 
 dependencies {
