@@ -1,29 +1,31 @@
 package kanacheck.kanacheck;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.core.Appender;
-import org.apache.logging.log4j.core.Logger;
-import org.apache.logging.log4j.core.appender.WriterAppender;
-import org.apache.logging.log4j.core.layout.PatternLayout;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.Appender;
+import ch.qos.logback.core.OutputStreamAppender;
 import kanacheck.config.Config;
+import org.slf4j.LoggerFactory;
 
 class KanacheckTest {
 
     private Kanacheck kanacheck;
     private final Path tempFile = Path.of("temp-test-file.txt");
     private final Path configFile = Path.of("kanacheck.json");
-    private StringWriter logOutput;
-    private Appender appender;
+    private ByteArrayOutputStream logOutput;
+    private Appender<ILoggingEvent> appender;
     private Logger rootLogger;
 
     @BeforeEach
@@ -33,16 +35,24 @@ class KanacheckTest {
         Files.writeString(tempFile, "This is a test file with a　sample string.");
 
         // Capture log output
-        logOutput = new StringWriter();
-        appender = WriterAppender.createAppender(
-                PatternLayout.createDefaultLayout(),
-                null,
-                logOutput,
-                "StringAppender",
-                false,
-                true);
-        appender.start();
-        rootLogger = (Logger) LogManager.getRootLogger();
+        logOutput = new ByteArrayOutputStream();
+        LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
+
+        PatternLayoutEncoder encoder = new PatternLayoutEncoder();
+        encoder.setContext(context);
+        encoder.setPattern("%msg%n");
+        encoder.start();
+
+        OutputStreamAppender<ILoggingEvent> osAppender = new OutputStreamAppender<>();
+        osAppender.setContext(context);
+        osAppender.setName("OutputStream");
+        osAppender.setEncoder(encoder);
+        osAppender.setOutputStream(logOutput);
+        osAppender.start();
+
+        appender = osAppender;
+
+        rootLogger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
         rootLogger.addAppender(appender);
     }
 
@@ -50,7 +60,7 @@ class KanacheckTest {
     void tearDown() throws IOException {
         Files.deleteIfExists(tempFile);
         Files.deleteIfExists(configFile);
-        rootLogger.removeAppender(appender);
+        rootLogger.detachAppender(appender);
         appender.stop();
     }
 
