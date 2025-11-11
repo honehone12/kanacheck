@@ -6,8 +6,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import kanacheck.config.Config;
 
@@ -17,7 +17,7 @@ import tools.jackson.databind.ObjectMapper;
 public class Kanacheck {
 
     protected static final Path CONFIG_PATH = Paths.get("kanacheck.json");
-    protected final Logger _log = LogManager.getLogger(this);
+    protected final Logger _log = LoggerFactory.getLogger(this.getClass());
 
     public void config() {
         try {
@@ -29,7 +29,7 @@ public class Kanacheck {
             Files.writeString(CONFIG_PATH, json);
             _log.info("config file has been generated as '{}'", CONFIG_PATH);
         } catch (IOException | JacksonException e) {
-            _log.error(e);
+            _log.error(e.toString());
         }
     }
 
@@ -37,7 +37,7 @@ public class Kanacheck {
         try {
             searchFile(validatePath(path), readConfig());
         } catch (IOException e) {
-            _log.error("'{}' is not a utf-8 encoded file: {}", path, e);
+            _log.error("'{}' is not a utf-8 encoded file: {}", path, e.toString());
         }
     }
 

@@ -24,7 +24,7 @@ public class KanacheckMultiThread extends Kanacheck {
         try {
             searchDir(validatePath(path), readConfig());
         } catch (IOException e) {
-            _log.error(e);
+            _log.error(e.toString());
         }
     }
 
